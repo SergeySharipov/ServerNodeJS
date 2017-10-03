@@ -1,4 +1,4 @@
-var SERVER_NAME = 'product-api'
+var SERVER_NAME = 'product-api';
 var PORT = 3000;
 var HOST = '127.0.0.1';
 var countGet = 0, countPost = 0;
@@ -9,21 +9,21 @@ var restify = require('restify')
     , productsSave = require('save')('products')
 
 // Create the restify server
-    , server = restify.createServer({product: SERVER_NAME})
+    , server = restify.createServer({product: SERVER_NAME});
 
 server.listen(PORT, HOST, function () {
-    console.log('Server %s listening at %s', server.product, server.url)
-    console.log('Resources:')
-    console.log(' /sendGet')
+    console.log('Server %s listening at %s', server.product, server.url);
+    console.log('Resources:');
+    console.log(' /sendGet');
     console.log(' /sendPost')
-})
+});
 
 server
 // Allow the use of POST
     .use(restify.fullResponse())
 
     // Maps req.body to req.params so there is no switching between them
-    .use(restify.bodyParser())
+    .use(restify.bodyParser());
 
 // Get all products in the system
 server.get('/sendGet', function (req, res, next) {
@@ -35,7 +35,7 @@ server.get('/sendGet', function (req, res, next) {
         // Return all of the products in the system
         res.send(products)
     })
-})
+});
 
 // Get a single product by their product id
 server.get('/products/:id', function (req, res, next) {
@@ -44,7 +44,7 @@ server.get('/products/:id', function (req, res, next) {
     productsSave.findOne({_id: req.params.id}, function (error, product) {
 
         // If there are any errors, pass them to next in the correct format
-        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
 
         if (product) {
             // Send the product if no issues
@@ -54,7 +54,7 @@ server.get('/products/:id', function (req, res, next) {
             res.send(404)
         }
     })
-})
+});
 
 server.del('/sendDelete', function (req, res, next) {
 
@@ -62,12 +62,12 @@ server.del('/sendDelete', function (req, res, next) {
     productsSave.deleteMany(function (error, product) {
 
         // If there are any errors, pass them to next in the correct format
-        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
 
         // Send a 200 OK response
         res.send(200)
     })
-})
+});
 
 // Create a new product
 server.post('/sendPost', function (req, res, next) {
@@ -85,18 +85,18 @@ server.post('/sendPost', function (req, res, next) {
     var newProduct = {
         product: req.params.product,
         price: req.params.price
-    }
+    };
 
     // Create the product using the persistence engine
     productsSave.create(newProduct, function (error, product) {
 
         // If there are any errors, pass them to next in the correct format
-        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
 
         // Send the product if no issues
         res.send(201, product)
     })
-})
+});
 
 // Update a product by their id
 server.put('/products/:id', function (req, res, next) {
@@ -115,18 +115,18 @@ server.put('/products/:id', function (req, res, next) {
         _id: req.params.id,
         product: req.params.product,
         price: req.params.price
-    }
+    };
 
     // Update the product with the persistence engine
     productsSave.update(newproduct, function (error, product) {
 
         // If there are any errors, pass them to next in the correct format
-        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
 
         // Send a 200 OK response
         res.send(200)
     })
-})
+});
 
 // Delete product with the given id
 server.del('/products/:id', function (req, res, next) {
@@ -135,9 +135,9 @@ server.del('/products/:id', function (req, res, next) {
     productsSave.delete(req.params.id, function (error, product) {
 
         // If there are any errors, pass them to next in the correct format
-        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+        if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
 
         // Send a 200 OK response
         res.send()
     })
-})
+});
